@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Trang Cá Nhân Nghệ Sĩ - ARTFAIR</title>
+  <meta name="description" content="Khám phá kho tranh độc quyền, đánh giá uy tín và đặt hàng Commission trực tiếp từ nghệ sĩ tài năng tại ARTFAIR.">
+
+  <!-- Google Fonts: Oswald & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+<style>
+    /* ======================================================= */
+    /* 1. KHẮC PHỤC TRIỆT ĐỂ NHÃN COMMISSION ĐÈ CHỮ (ẢNH 2)    */
+    /* ======================================================= */
+    .profile-avatar-column {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      flex-shrink: 0 !important;
+      position: relative !important;
+    }
+
+    /* Gỡ bỏ position absolute để nhãn nằm gọn gàng ngay dưới avatar */
+    .artist-status-pill,
+    #artistStatusPill,
+    [class*="artist-status"] {
+      position: static !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      white-space: normal !important; /* Cho phép rớt dòng tự nhiên */
+      max-width: 140px !important;
+      text-align: center !important;
+      font-size: 0.72rem !important;
+      line-height: 1.35 !important;
+      padding: 6px 10px !important;
+      margin-top: 10px !important;
+      border-radius: 12px !important;
+      background: #ecfdf5 !important;
+      color: #059669 !important;
+      border: 1px solid #a7f3d0 !important;
+      transform: none !important;
+    }
+
+    /* ======================================================= */
+    /* 2. CĂN ĐỀU 3 GÓI BẢN QUYỀN & CHỐNG CẮT BADGE (ẢNH 1)    */
+    /* ======================================================= */
+    
+    /* Tạo khoảng trống bên trên để badge không bao giờ bị cắt */
+    .commission-packages-grid,
+    #commissionPackagesGrid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 24px !important;
+      align-items: stretch !important; /* Ép 3 thẻ luôn có chiều cao bằng nhau */
+      padding-top: 24px !important;
+      overflow: visible !important;
+    }
+
+    /* Khung từng thẻ gói dịch vụ */
+    .commission-packages-grid > div,
+    [class*="commission-pkg-card"],
+    [class*="package-card"] {
+      display: flex !important;
+      flex-direction: column !important;
+      height: 100% !important;
+      position: relative !important;
+      overflow: visible !important; /* Không cắt phạm vi huy hiệu đỉnh */
+      border-radius: 20px !important;
+      background: #ffffff !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Huy hiệu "LỰA CHỌN PHỔ BIẾN" nổi trên đỉnh thẻ giữa */
+    [class*="popular-badge"],
+    [class*="pkg-popular"],
+    [class*="badge-popular"],
+    .commission-packages-grid span:has(.fa-fire),
+    .commission-packages-grid div:has(> [class*="popular"]) {
+      position: absolute !important;
+      top: -14px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 10 !important;
+      white-space: nowrap !important;
+      margin: 0 !important;
+    }
+
+    /* Ghim cố định nút "CHỌN GÓI NÀY & ĐIỀN BRIEF" xuống sát đáy */
+    .commission-packages-grid button,
+    .commission-packages-grid a.btn,
+    .commission-packages-grid [class*="btn-select"],
+    .commission-packages-grid [class*="btn-choose"] {
+      margin-top: auto !important; /* Đẩy nút xuống đáy cùng một hàng thẳng tắp */
+      width: 100% !important;
+      height: 44px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      font-weight: 700 !important;
+      font-size: 0.85rem !important;
+      border-radius: 12px !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Ẩn hoàn toàn menu di động thừa trên desktop */
+    .mobile-nav-drawer,
+    #mobileNavDrawer {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    @media (max-width: 900px) {
+      .commission-packages-grid {
+        grid-template-columns: 1fr !important;
+        gap: 32px !important;
+      }
+    }
+/* 1. Thu gọn kích thước popup về chuẩn tỉ lệ vàng (max 540px) */
+    #directCommissionSuccessModal .modal-container,
+    #directCommissionSuccessModal .confirmation-modal-box,
+    .confirmation-modal-box {
+      width: 92% !important;
+      max-width: 520px !important;
+      background: #ffffff !important;
+      border-radius: 24px !important;
+      padding: 34px 28px 28px 28px !important;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25) !important;
+      border: 1px solid rgba(255, 255, 255, 0.8) !important;
+      margin: auto !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+    }
+
+    /* 2. Biểu tượng tích xanh tròn lớn, tươi sáng */
+    .confirmation-modal-box .success-check-icon {
+      width: 64px !important;
+      height: 64px !important;
+      border-radius: 50% !important;
+      background: #ecfdf5 !important;
+      border: 2px solid #a7f3d0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      margin: 0 auto 16px auto !important;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.18) !important;
+    }
+
+    .confirmation-modal-box .success-check-icon i {
+      font-size: 2rem !important;
+      color: #10b981 !important;
+    }
+
+    /* 3. Tiêu đề và mã vé */
+    .confirmation-modal-box .confirm-title {
+      font-size: 1.45rem !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      margin: 0 0 6px 0 !important;
+    }
+
+    .confirmation-modal-box .confirm-sub {
+      font-size: 0.85rem !important;
+      color: #64748b !important;
+      margin: 0 0 18px 0 !important;
+    }
+
+    .confirmation-modal-box .badge-ticket {
+      background: #fee2e2 !important;
+      color: #ef4444 !important;
+      padding: 3px 10px !important;
+      border-radius: 8px !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.5px !important;
+      font-family: monospace !important;
+      font-size: 0.95rem !important;
+    }
+
+    /* 4. Phiếu tóm tắt thông tin đơn hàng (Receipt Ticket Format) */
+    #directConfirmSummaryBox {
+      width: 100% !important;
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 16px !important;
+      padding: 16px 20px !important;
+      margin-bottom: 18px !important;
+      text-align: left !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+      font-size: 0.85rem !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Căn đều từng hàng tóm tắt, ngăn cách bằng nét đứt mỏng */
+    #directConfirmSummaryBox > * {
+      margin: 0 !important;
+      padding: 6px 0 !important;
+      color: #334155 !important;
+      border-bottom: 1px dashed #e2e8f0 !important;
+      line-height: 1.5 !important;
+      word-break: break-word !important;
+    }
+
+    #directConfirmSummaryBox > *:last-child {
+      border-bottom: none !important;
+    }
+
+    #directConfirmSummaryBox strong {
+      color: #0f172a !important;
+      font-weight: 700 !important;
+    }
+
+    /* 5. Dòng lưu ý bên dưới phiếu */
+    .confirmation-modal-box .confirm-instruction {
+      font-size: 0.82rem !important;
+      color: #64748b !important;
+      line-height: 1.5 !important;
+      margin: 0 0 20px 0 !important;
+      padding: 0 10px !important;
+    }
+
+    /* 6. Nút "Đã Hiểu & Đóng" phủ ngang toàn bộ bề rộng */
+    .confirmation-modal-box button,
+    .confirmation-modal-box .btn-primary {
+      width: 100% !important;
+      height: 46px !important;
+      background: linear-gradient(135deg, #f87171, #ef4444) !important;
+      border: none !important;
+      border-radius: 12px !important;
+      color: #ffffff !important;
+      font-size: 0.92rem !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.28) !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+    }
+
+    .confirmation-modal-box button:hover {
+      opacity: 0.95 !important;
+      transform: translateY(-2px) !important;
+    }
+.reviews-hub-container {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      padding: 10px 0 40px 0 !important;
+    }
+
+    /* 1. Bảng tóm tắt chỉ số điểm uy tín (3 Cột cân xứng) */
+    .reviews-summary-card {
+      background: #ffffff !important;
+      border: 1px solid #f1f5f9 !important;
+      border-radius: 24px !important;
+      padding: 30px !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+      display: grid !important;
+      grid-template-columns: 1fr 1.6fr 1.2fr !important;
+      gap: 32px !important;
+      align-items: center !important;
+    }
+
+    /* Cột 1: Điểm số to tròn nổi bật */
+    .summary-overall-score {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      padding-right: 24px !important;
+      border-right: 1px solid #f1f5f9 !important;
+    }
+
+    .summary-overall-score .big-score {
+      font-size: 3.6rem !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      line-height: 1 !important;
+      margin-bottom: 8px !important;
+      letter-spacing: -1px !important;
+    }
+
+    .star-rating-row {
+      color: #f59e0b !important;
+      font-size: 1.15rem !important;
+      margin-bottom: 8px !important;
+      display: flex !important;
+      gap: 4px !important;
+    }
+
+    .score-sub {
+      font-size: 0.85rem !important;
+      color: #64748b !important;
+      margin: 0 0 12px 0 !important;
+    }
+
+    .verified-guarantee-pill {
+      background: #ecfdf5 !important;
+      color: #059669 !important;
+      border: 1px solid #a7f3d0 !important;
+      padding: 4px 12px !important;
+      border-radius: 20px !important;
+      font-size: 0.75rem !important;
+      font-weight: 700 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    /* Cột 2: Các thanh biểu đồ tỷ lệ sao */
+    .summary-breakdown-bars {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+    }
+
+    .breakdown-bar-row {
+      display: flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+      font-size: 0.82rem !important;
+      color: #475569 !important;
+      font-weight: 600 !important;
+    }
+
+    .breakdown-bar-row span:first-child {
+      width: 48px !important;
+    }
+
+    .bar-track {
+      flex: 1 !important;
+      height: 8px !important;
+      background: #f1f5f9 !important;
+      border-radius: 10px !important;
+      overflow: hidden !important;
+    }
+
+    .bar-fill {
+      height: 100% !important;
+      background: linear-gradient(90deg, #f59e0b, #ef4444) !important;
+      border-radius: 10px !important;
+    }
+
+    .breakdown-bar-row span:last-child {
+      width: 34px !important;
+      text-align: right !important;
+      color: #64748b !important;
+    }
+
+    /* Cột 3: Các cam kết dịch vụ của Artist */
+    .summary-key-highlights {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+      padding-left: 24px !important;
+      border-left: 1px solid #f1f5f9 !important;
+    }
+
+    .highlight-item {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      font-size: 0.84rem !important;
+      color: #1e293b !important;
+      font-weight: 600 !important;
+    }
+
+    .highlight-item i {
+      color: #10b981 !important;
+      background: #ecfdf5 !important;
+      width: 22px !important;
+      height: 22px !important;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem !important;
+    }
+
+    /* 2. Thanh lọc Filter Chips */
+    .reviews-filter-bar {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      flex-wrap: wrap !important;
+    }
+
+    .reviews-filter-bar .filter-label {
+      font-size: 0.85rem !important;
+      font-weight: 700 !important;
+      color: #475569 !important;
+      margin-right: 6px !important;
+    }
+
+    .review-chip {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      border-radius: 20px !important;
+      padding: 7px 16px !important;
+      font-size: 0.82rem !important;
+      font-weight: 700 !important;
+      color: #475569 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .review-chip:hover {
+      border-color: #fca5a5 !important;
+      color: #ef4444 !important;
+    }
+
+    .review-chip.active {
+      background: #fee2e2 !important;
+      border-color: #ef4444 !important;
+      color: #ef4444 !important;
+    }
+
+    /* 3. Danh sách thẻ Review cá nhân (#reviewsFeedList) */
+    .reviews-feed-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 18px !important;
+    }
+
+    .review-card-item {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 20px !important;
+      padding: 22px 24px !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+      transition: transform 0.2s ease !important;
+    }
+
+    .review-card-item:hover {
+      transform: translateY(-2px) !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    .review-header-row {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: flex-start !important;
+    }
+
+    .reviewer-meta {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+    }
+
+    .reviewer-avatar {
+      width: 44px !important;
+      height: 44px !important;
+      border-radius: 50% !important;
+      object-fit: cover !important;
+      border: 2px solid #ffffff !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .reviewer-name {
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
+      color: #0f172a !important;
+      margin: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    .badge-buyer-verified {
+      background: #eff6ff !important;
+      color: #2563eb !important;
+      font-size: 0.7rem !important;
+      padding: 2px 8px !important;
+      border-radius: 12px !important;
+      font-weight: 700 !important;
+    }
+
+    .review-date {
+      font-size: 0.75rem !important;
+      color: #94a3b8 !important;
+      margin-top: 2px !important;
+    }
+
+    .review-purchased-tag {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #475569 !important;
+      font-size: 0.75rem !important;
+      font-weight: 700 !important;
+      padding: 4px 10px !important;
+      border-radius: 8px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      width: fit-content !important;
+    }
+
+    .review-body-text {
+      font-size: 0.88rem !important;
+      color: #334155 !important;
+      line-height: 1.55 !important;
+      margin: 0 !important;
+    }
+
+    /* Khung Artist phản hồi lại nhận xét */
+    .artist-reply-bubble {
+      background: #fffafa !important;
+      border-left: 3px solid #ef4444 !important;
+      border-radius: 0 14px 14px 0 !important;
+      padding: 12px 16px !important;
+      margin-top: 4px !important;
+    }
+
+    .artist-reply-title {
+      font-size: 0.82rem !important;
+      font-weight: 700 !important;
+      color: #ef4444 !important;
+      margin: 0 0 4px 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    .artist-reply-text {
+      font-size: 0.82rem !important;
+      color: #475569 !important;
+      margin: 0 !important;
+      line-height: 1.45 !important;
+    }
+
+    @media (max-width: 900px) {
+      .reviews-summary-card {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+      }
+      .summary-overall-score {
+        border-right: none !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        padding: 0 0 16px 0 !important;
+      }
+      .summary-key-highlights {
+        border-left: none !important;
+        border-top: 1px solid #f1f5f9 !important;
+        padding: 16px 0 0 0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="artist-profile-page">
+
+  <!-- Header Navigation -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-container single-row-header">
+      <!-- Logo -->
+      <a href="index.html" class="brand-logo" id="brandLogo">
+        <div class="logo-symbol">
+          <span class="logo-dot"></span>
+          <span class="logo-brush"><i class="fa-solid fa-palette"></i></span>
+        </div>
+        <div class="logo-text-group">
+          <span class="logo-title">ARTFAIR</span>
+          <span class="logo-tagline">HỘI CHỢ NGHỆ THUẬT MỞ</span>
+        </div>
+      </a>
+
+      <!-- Quick Nav Links -->
+      <nav class="main-nav">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link"><i class="fa-solid fa-arrow-left"></i> Về Chợ Phiên</a></li>
+          <li><a href="#tab-gallery" class="nav-link" onclick="switchProfileTab('gallery')">Kho Tranh Tác Giả</a></li>
+          <li><a href="#tab-commission" class="nav-link" onclick="switchProfileTab('commission')">Đặt Commission</a></li>
+          <li><a href="#tab-reviews" class="nav-link" onclick="switchProfileTab('reviews')">Đánh Giá & Feedback</a></li>
+        </ul>
+      </nav>
+
+      <!-- Search in Artist Shop -->
+      <div class="header-search-bar">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="artistSearchInput" placeholder="Tìm artwork trong gian hàng này..." autocomplete="off">
+        <button class="search-clear-btn" id="artistSearchClearBtn" style="display: none;">&times;</button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <!-- Favorites Counter -->
+        <button class="icon-action-btn" id="btnHeaderFavorites" title="Bộ sưu tập yêu thích">
+          <i class="fa-regular fa-heart"></i>
+          <span class="action-counter-badge" id="favoritesCountBadge">0</span>
+        </button>
+
+        <!-- Cart Counter -->
+        <button class="icon-action-btn" id="btnHeaderCart" title="Giỏ hàng bản quyền">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="action-counter-badge" id="cartCountBadge">0</span>
+        </button>
+
+        <!-- User Auth Zone -->
+        <div class="user-auth-zone" id="userAuthZone">
+          <div class="guest-actions" id="guestActions">
+            <button class="btn btn-outline btn-sm" onclick="openAuthModal('login')">Đăng Nhập</button>
+            <button class="btn btn-primary btn-sm" onclick="openAuthModal('register')">Đăng Ký</button>
+          </div>
+
+         <div class="logged-in-profile" id="loggedInProfile" style="display: none;">
+            <div class="user-avatar-pill" id="userAvatarPill" onclick="window.location.href='user-profile.html'">
+              <img src="2e72c41b49afad2d08530b6a0475ba66.jpg" alt="Avatar" class="avatar-img" id="userAvatarImg">
+              <span class="user-name" id="userNameLabel">Hà Anh</span>
+              <i class="fa-solid fa-chevron-down arrow-down"></i>
+            </div>
+            
+            <!-- Menu Dropdown Chuẩn Hóa Cho Người Mua -->
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+              <div class="dropdown-header">
+                <p class="dropdown-user-name" id="dropdownUserName">Hà Anh</p>
+                <p class="dropdown-user-role" id="dropdownUserRole">Collector • Thành Viên</p>
+              </div>
+              <ul class="dropdown-list">
+                <li><a href="user-profile.html"><i class="fa-solid fa-gauge"></i> Bảng Quản Lý Cá Nhân</a></li>
+                <li><a href="user-profile.html#paneBuyerCollector"><i class="fa-solid fa-file-contract"></i> Kho Bản Quyền Đã Mua</a></li>
+                <li><a href="user-profile.html#paneBuyerTracker"><i class="fa-solid fa-clock-rotate-left"></i> Tiến Độ Commission</a></li>
+                <li class="divider"></li>
+                <li><a href="#" id="btnLogout" class="text-danger" onclick="handleHeaderLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng Xuất</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <button class="mobile-toggle-btn" id="mobileMenuToggle" aria-label="Mở menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Navigation -->
+ <div class="mobile-nav-drawer" id="mobileNavDrawer" style="display: none !important;">
+    <div class="drawer-header">
+      <div class="brand-logo">
+        <span class="logo-brush"><i class="fa-solid fa-palette"></i></span>
+        <span class="logo-title">ARTFAIR</span>
+      </div>
+      <button class="drawer-close-btn" id="closeMobileNav">&times;</button>
+    </div>
+    <div class="drawer-body">
+      <ul class="mobile-links">
+        <li><a href="index.html" class="mobile-link">← Về Chợ Phiên Chính</a></li>
+        <li><a href="#tab-gallery" class="mobile-link" onclick="switchProfileTab('gallery')">Kho Tranh Tác Giả</a></li>
+        <li><a href="#tab-commission" class="mobile-link" onclick="switchProfileTab('commission')">Góc Đặt Commission</a></li>
+        <li><a href="#tab-reviews" class="mobile-link" onclick="switchProfileTab('reviews')">Đánh Giá & Nhận Xét</a></li>
+      </ul>
+      <div class="mobile-auth-buttons">
+        <button class="btn btn-outline w-100 mb-2" onclick="openAuthModal('login')">Đăng Nhập</button>
+        <button class="btn btn-primary w-100" onclick="openAuthModal('register')">Đăng Ký Tài Khoản</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breadcrumb Navigation Bar -->
+  <!-- Breadcrumb Navigation Bar -->
+  <div class="profile-breadcrumb-bar">
+    <div class="profile-container-1200">
+      <ul class="breadcrumb-list">
+        <li><a href="index.html"><i class="fa-solid fa-house"></i> Chợ Phiên ARTFAIR</a></li>
+        <li><i class="fa-solid fa-chevron-right separator"></i></li>
+        <li><a href="index.html#artist-booths">Gian Hàng Nghệ Sĩ</a></li>
+        <li><i class="fa-solid fa-chevron-right separator"></i></li>
+        <li class="active-crumb" id="breadcrumbArtistName">Họa Sĩ Lan Chi</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 1. HEADER PROFILE & STATS BAR (Cover, Avatar, Bio, Badges, Stats) -->
+  <!-- ========================================================================= -->
+  <section class="artist-header-hero">
+    <div class="profile-container-1200">
+      <!-- Artistic Cover Image Banner -->
+      <div class="profile-cover-wrapper">
+        <img src="45fbff086b31157aa2e23b94f086bd06.jpg" alt="Cover Image" id="artistCoverImg" class="profile-cover-img" loading="lazy" decoding="async">
+        <div class="profile-cover-gradient"></div>
+        <div class="cover-quick-actions">
+          <button class="btn btn-ghost-white btn-sm" onclick="copyProfileShareLink()">
+            <i class="fa-solid fa-share-nodes"></i> Chia Sẻ Trang
+          </button>
+        </div>
+      </div>
+
+      <!-- Profile Info Main Card -->
+      <div class="profile-info-main-card">
+        
+        <!-- Left: Avatar with Verified Ring -->
+        <div class="profile-avatar-column">
+          <div class="profile-avatar-frame">
+            <img src="2e72c41b49afad2d08530b6a0475ba66.jpg" alt="Artist Avatar" id="artistAvatarImg" class="profile-avatar-img" loading="lazy" decoding="async">
+            <span class="avatar-verified-badge" id="artistVerifiedIcon" title="Artist đã xác minh danh tính và năng lực sáng tác">
+              <i class="fa-solid fa-circle-check"></i>
+            </span>
+          </div>
+
+          <!-- Active Status Badge -->
+          <div class="artist-status-pill" id="artistStatusPill">
+            <span class="status-pulse-dot"></span>
+            <span id="artistStatusLabel">Đang nhận đơn Commission</span>
+          </div>
+        </div>
+
+        <!-- Center: Detailed Bio and Names -->
+        <div class="profile-details-column">
+          <div class="name-badge-row">
+            <h1 class="artist-headline-name" id="artistFullName">Lan Chi (Chi Art Studio)</h1>
+            <span class="artist-verified-tag" id="artistBadgeTag">
+              <i class="fa-solid fa-award"></i> Verified Pro
+            </span>
+          </div>
+
+          <p class="artist-sub-title" id="artistRoleTitle">Chuyên Họa Màu Nước & Storybook Illustration</p>
+
+          <p class="artist-bio-prose" id="artistBioText">
+            "Kể lại những giấc mơ tuổi trẻ qua gam màu pastel dịu dàng và nét vẽ thanh tao. Chuyên sáng tác tranh minh họa bìa sách văn học, thời trang pastel và ấn phẩm tranh canvas nghệ thuật."
+          </p>
+
+          <!-- Specialties Badges -->
+          <div class="specialties-chips-list" id="artistSpecialties">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Meta infos: Location, Join Date -->
+          <div class="artist-meta-strip">
+            <span><i class="fa-solid fa-location-dot"></i> <strong id="artistLocation">Hà Nội, Việt Nam</strong></span>
+            <span><i class="fa-regular fa-calendar-check"></i> Tham gia: <strong id="artistJoinDate">Tháng 3, 2024</strong></span>
+            <span><i class="fa-solid fa-users"></i> <strong id="artistFollowersCount">1.4k</strong> Người theo dõi</span>
+          </div>
+        </div>
+
+        <!-- Right: Primary CTA Action Buttons -->
+        <div class="profile-actions-column">
+          <button class="btn btn-primary btn-lg w-100 pulse-glow mb-2" id="btnHeroFollowArtist" onclick="handleProfileFollow()">
+            <i class="fa-solid fa-user-plus"></i> <span id="followBtnText">Theo Dõi Gian Hàng</span>
+          </button>
+          
+          <button class="btn btn-secondary w-100 mb-2" onclick="scrollToCommissionTab()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Đặt Commission Riêng
+          </button>
+
+          <button class="btn btn-outline w-100" onclick="handleDirectMessage()">
+            <i class="fa-regular fa-comment-dots"></i> Nhắn Tin Cho Artist
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Reputation & Trust Stats Bar (Enclosed Card) -->
+      <div class="artist-stats-bar">
+        <div class="stat-metric-cell">
+          <div class="stat-icon-circle"><i class="fa-solid fa-star text-warning"></i></div>
+          <div class="stat-text-group">
+            <div class="stat-number"><span id="statRatingVal">4.95</span> <span class="stat-max">/ 5.0</span></div>
+            <div class="stat-caption"><span id="statReviewCount">128</span> Đánh giá từ khách hàng</div>
+          </div>
+        </div>
+
+        <div class="stat-bar-divider"></div>
+
+        <div class="stat-metric-cell">
+          <div class="stat-icon-circle"><i class="fa-solid fa-bolt text-primary"></i></div>
+          <div class="stat-text-group">
+            <div class="stat-number" id="statResponseRate">99%</div>
+            <div class="stat-caption">Tỷ lệ phản hồi nhanh (<span id="statResponseTime">&lt; 1 giờ</span>)</div>
+          </div>
+        </div>
+
+        <div class="stat-bar-divider"></div>
+
+        <div class="stat-metric-cell">
+          <div class="stat-icon-circle"><i class="fa-solid fa-bag-shopping text-success"></i></div>
+          <div class="stat-text-group">
+            <div class="stat-number"><span id="statSoldVal">142</span>+</div>
+            <div class="stat-caption">Tác phẩm bản quyền đã bán</div>
+          </div>
+        </div>
+
+        <div class="stat-bar-divider"></div>
+
+        <div class="stat-metric-cell">
+          <div class="stat-icon-circle"><i class="fa-solid fa-shield-halved text-mint"></i></div>
+          <div class="stat-text-group">
+            <div class="stat-number">100%</div>
+            <div class="stat-caption">Được bảo hộ quyền tác giả ARTFAIR</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- PROFILE NAVIGATION SUB-NAVBAR (PILL TABS IN 1 ROW) -->
+  <!-- ========================================================================= -->
+  <section class="profile-tabs-sticky-section">
+    <div class="profile-container-1200">
+      <div class="profile-tabs-pill-bar" id="profileTabsNav">
+        <a href="index.html" class="profile-tab-pill tab-link-home" title="Quay lại chợ phiên chính">
+          <i class="fa-solid fa-arrow-left"></i> <span>Về Chợ Phiên</span>
+        </a>
+
+        <button class="profile-tab-pill profile-tab-item active" data-tab="gallery" onclick="switchProfileTab('gallery')">
+          <i class="fa-solid fa-palette"></i> <span>Kho Tranh Tác Giả</span> 
+          <span class="tab-badge-count" id="tabGalleryCount">0</span>
+        </button>
+
+        <button class="profile-tab-pill profile-tab-item" data-tab="commission" onclick="switchProfileTab('commission')">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Đặt Commission</span>
+          <span class="tab-badge-pill">Hot</span>
+        </button>
+
+        <button class="profile-tab-pill profile-tab-item" data-tab="reviews" onclick="switchProfileTab('reviews')">
+          <i class="fa-solid fa-star"></i> <span>Đánh Giá & Feedback</span> 
+          <span class="tab-badge-count" id="tabReviewsCount">0</span>
+        </button>
+
+        <button class="profile-tab-pill profile-tab-item" data-tab="about" onclick="switchProfileTab('about')">
+          <i class="fa-solid fa-circle-info"></i> <span>Giới Thiệu & Quy Trình</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- TAB CONTENTS CONTAINER -->
+  <!-- ========================================================================= -->
+  <main class="profile-main-content">
+    <div class="profile-container-1200">
+
+      <!-- ===================================================================== -->
+      <!-- TAB 1: KHO TRANH CỦA TÁC GIẢ (ARTIST'S GALLERY / SHOP) -->
+      <!-- ===================================================================== -->
+      <div class="tab-pane active" id="pane-gallery">
+        <!-- Sub-filters inside Artist's Shop -->
+        <div class="artist-shop-filter-bar">
+          <div class="shop-filter-left">
+            <button class="shop-filter-chip active" data-shopcat="all" onclick="filterArtistShop('all')">Tất Cả Tác Phẩm</button>
+            <button class="shop-filter-chip" data-shopcat="illustration" onclick="filterArtistShop('illustration')">Minh Họa</button>
+            <button class="shop-filter-chip" data-shopcat="tshirt" onclick="filterArtistShop('tshirt')">Áo Thun POD</button>
+            <button class="shop-filter-chip" data-shopcat="decor" onclick="filterArtistShop('decor')">Canvas Decor</button>
+            <button class="shop-filter-chip" data-shopcat="logo" onclick="filterArtistShop('logo')">Logo & Branding</button>
+          </div>
+
+          <div class="shop-filter-right">
+            <select id="artistShopSort" class="custom-select" onchange="sortArtistShop(this.value)">
+              <option value="newest">Mới Lên Sàn</option>
+              <option value="popular">Nhiều Lượt Thích Nhất</option>
+              <option value="price-asc">Giá: Thấp đến Cao</option>
+              <option value="price-desc">Giá: Cao đến Thấp</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Artwork Grid -->
+        <div class="artwork-grid-container" id="artistArtworkGrid">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div class="empty-state-card" id="artistGalleryEmpty" style="display: none;">
+          <div class="empty-icon"><i class="fa-solid fa-paintbrush"></i></div>
+          <h3>Chưa có tác phẩm trong danh mục này</h3>
+          <p>Hãy xem toàn bộ tác phẩm của artist hoặc quay lại sau khi artist tải lên các ấn phẩm mới.</p>
+          <button class="btn btn-primary" onclick="filterArtistShop('all')">Xem Tất Cả Artwork</button>
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 2: GÓC COMMISSION & ĐẶT VẼ RIÊNG (DEDICATED COMMISSION HUB) -->
+      <!-- ===================================================================== -->
+      <div class="tab-pane" id="pane-commission" data-anchor="commission-section"><span id="commission-section" style="position:relative;top:-80px;display:block;visibility:hidden;"></span>
+        <div class="commission-hub-wrapper">
+          
+          <div class="hub-header-banner">
+            <span class="sub-title-pill"><i class="fa-solid fa-handshake-simple"></i> COMMISSION TRỰC TIẾP</span>
+            <h2 class="section-title">Góc Đặt Vẽ Độc Bản Theo Yêu Cầu Cùng <span id="commArtistNameHeading">Lan Chi</span></h2>
+            <p class="section-desc">
+              Bạn có thể chọn một trong các gói dịch vụ mẫu bên dưới hoặc điền form brief yêu cầu cụ thể với mức ngân sách linh hoạt từ <strong>1.250.000đ đến 75.000.000đ</strong>.
+            </p>
+          </div>
+
+          <!-- 1. Commission Sample Packages Grid -->
+          <div class="commission-packages-grid" id="commissionPackagesGrid">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- 2. Direct Interactive Brief Form for this Artist -->
+          <div class="artist-direct-brief-card" id="artistBriefBox">
+            <div class="brief-card-header">
+              <div class="brief-title-row">
+                <i class="fa-solid fa-pen-nib text-primary"></i>
+                <div>
+                  <h3 id="formBriefTitle">Gửi Yêu Cầu Commission Cho Lan Chi</h3>
+                  <p class="brief-header-sub">Artist cam kết bảo mật ý tưởng sáng tạo và phản hồi kèm phác thảo đầu tiên trong vòng 2-4 giờ.</p>
+                </div>
+              </div>
+              <span class="brief-step-badge">Bước 1: Điền Brief Ý Tưởng</span>
+            </div>
+
+            <form class="direct-brief-form" id="directArtistBriefForm" onsubmit="handleDirectCommissionSubmit(event)">
+              
+              <div class="form-grid-2">
+                <!-- Project Title -->
+                <div class="form-group">
+                  <label class="form-label" for="directProjectTitle">Tiêu Đề Dự Án / Tên Ấn Phẩm:</label>
+                  <input type="text" id="directProjectTitle" class="form-input" placeholder="Ví dụ: Thiết kế Graphic Tee Mèo Phi Hành Gia Pastel" required>
+                </div>
+
+                <!-- Selected Package -->
+                <div class="form-group">
+                  <label class="form-label" for="directSelectedPackage">Gói Dịch Vụ Áp Dụng:</label>
+                  <select id="directSelectedPackage" class="custom-select form-input" onchange="handlePackageSelectChange(this.value)">
+                    <!-- Options populated by JS -->
+                  </select>
+                </div>
+              </div>
+
+              <!-- Budget Range Slider ($50 - $3,000) -->
+              <div class="budget-slider-box">
+                <div class="slider-header-row">
+                  <label class="form-label" for="directBudgetSlider">Ngân Sách Dự Kiến Đầu Tư Cho Tác Phẩm Này:</label>
+                  <div class="budget-dual-display">
+                    <span class="slider-current-val" id="directSliderVal">6.250.000 VNĐ</span>
+                  </div>
+                </div>
+                <input type="range" class="form-range-slider" id="directBudgetSlider" min="1250000" max="75000000" step="500000" value="6250000" oninput="updateDirectSlider(this.value)">
+                <div class="slider-minmax">
+                  <span>1.250.000đ (Cá nhân)</span>
+                  <span>12.500.000đ (POD Tiêu Chuẩn)</span>
+                  <span>37.500.000đ (Thương Mại)</span>
+                  <span>75.000.000đ (Độc Quyền VIP)</span>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <!-- Deadline Date -->
+                <div class="form-group">
+                  <label class="form-label" for="directDeadline">Hạn Bàn Giao Mong Muốn (Deadline):</label>
+                  <input type="date" class="form-input" id="directDeadline" required>
+                </div>
+
+                <!-- Usage Rights -->
+                <div class="form-group">
+                  <label class="form-label" for="directUsageRights">Cấp Độ Bản Quyền Yêu Cầu:</label>
+                  <select id="directUsageRights" class="custom-select form-input" required>
+                    <option value="commercial">🛍️ Bản quyền thương mại POD (In áo thun, poster, sticker, cốc)</option>
+                    <option value="personal">🎨 Sử dụng cá nhân phi thương mại (Hình nền, avatar, kỷ niệm)</option>
+                    <option value="exclusive">👑 Độc quyền toàn phần (Mua đứt quyền tác giả, chuyển giao file gốc)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Brief Description -->
+              <div class="form-group">
+                <label class="form-label" for="directDescription">Mô Tả Chi Tiết Ý Tưởng & Phong Cách Màu Sắc:</label>
+                <textarea class="form-input form-textarea" id="directDescription" rows="4" placeholder="Mô tả chi tiết bố cục, cảm xúc, tông màu mong muốn, đối tượng khách hàng mục tiêu hoặc các lưu ý kỹ thuật (độ phân giải, phần mềm)..." required></textarea>
+              </div>
+
+              <!-- Reference Link or Moodboard Upload -->
+              <div class="form-group">
+                <label class="form-label" for="directMoodboardLink">Link Moodboard Tham Khảo (Pinterest / Figma / Google Drive) hoặc đính kèm ảnh:</label>
+                <div class="input-with-icon mb-2">
+                  <i class="fa-solid fa-link"></i>
+                  <input type="url" id="directMoodboardLink" class="form-input" placeholder="https://pinterest.com/your-board/...">
+                </div>
+
+                <div class="upload-dropzone" id="directDropzone" onclick="document.getElementById('directFileInput').click()">
+                  <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
+                  <p>Kéo thả ảnh mẫu hoặc <span class="highlight-browse">Chọn file tham khảo</span></p>
+                  <span class="dropzone-tip">Hỗ trợ JPG, PNG, PSD dưới 25MB (Giả lập đính kèm)</span>
+                  <input type="file" id="directFileInput" style="display: none;" multiple accept="image/*">
+                </div>
+                <div class="uploaded-files-list" id="directUploadedFiles"></div>
+              </div>
+
+              <!-- Direct Submit Button (Guest Intercept Protected) -->
+              <div class="form-submit-row">
+                <div class="submit-note">
+                  <i class="fa-solid fa-shield-check"></i> Hợp đồng điện tử bảo vệ cả người mua và artist. Tiền chỉ được giải ngân khi bạn duyệt bản phác thảo cuối cùng.
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg pulse-glow" id="btnSubmitDirectBrief">
+                  <i class="fa-solid fa-paper-plane"></i> Gửi Yêu Cầu Cho <span id="submitBtnArtistName">Lan Chi</span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 3: ĐÁNH GIÁ & REVIEW TỪ NGƯỜI MUA (TESTIMONIALS / REVIEWS HUB) -->
+      <!-- ===================================================================== -->
+      <div class="tab-pane" id="pane-reviews">
+        <div class="reviews-hub-container">
+          
+          <!-- Rating Breakdown Summary Card -->
+          <div class="reviews-summary-card">
+            <div class="summary-overall-score">
+              <div class="big-score" id="reviewSummaryScore">4.95</div>
+              <div class="star-rating-row" id="reviewSummaryStars">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+              </div>
+              <p class="score-sub"><span id="reviewSummaryCount">128</span> Đánh giá xác thực</p>
+              <div class="verified-guarantee-pill">
+                <i class="fa-solid fa-circle-check text-mint"></i> 100% Khách mua thật
+              </div>
+            </div>
+
+            <div class="summary-breakdown-bars">
+              <div class="breakdown-bar-row">
+                <span>5 Sao</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 94%;"></div></div>
+                <span>94%</span>
+              </div>
+              <div class="breakdown-bar-row">
+                <span>4 Sao</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 5%;"></div></div>
+                <span>5%</span>
+              </div>
+              <div class="breakdown-bar-row">
+                <span>3 Sao</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 1%;"></div></div>
+                <span>1%</span>
+              </div>
+              <div class="breakdown-bar-row">
+                <span>2 Sao</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 0%;"></div></div>
+                <span>0%</span>
+              </div>
+              <div class="breakdown-bar-row">
+                <span>1 Sao</span>
+                <div class="bar-track"><div class="bar-fill" style="width: 0%;"></div></div>
+                <span>0%</span>
+              </div>
+            </div>
+
+            <div class="summary-key-highlights">
+              <div class="highlight-item">
+                <i class="fa-solid fa-check text-primary"></i>
+                <span>File gốc in ấn chuẩn nét 100%</span>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-check text-primary"></i>
+                <span>Giao bản phác thảo đúng tiến độ</span>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-check text-primary"></i>
+                <span>Hỗ trợ chỉnh sửa nhiệt tình, chu đáo</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviews Filter Chips -->
+          <div class="reviews-filter-bar">
+            <span class="filter-label"><i class="fa-solid fa-filter"></i> Lọc đánh giá:</span>
+            <button class="review-chip active" data-revfilter="all" onclick="filterReviews('all')">Tất Cả (<span id="countRevAll">128</span>)</button>
+            <button class="review-chip" data-revfilter="5star" onclick="filterReviews('5star')">5 Sao (120)</button>
+            <button class="review-chip" data-revfilter="pod" onclick="filterReviews('pod')">Đơn Hàng POD (72)</button>
+            <button class="review-chip" data-revfilter="commission" onclick="filterReviews('commission')">Commission Độc Bản (56)</button>
+          </div>
+
+          <!-- Reviews List -->
+          <div class="reviews-feed-list" id="reviewsFeedList">
+            <!-- Rendered by JS -->
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 4: GIỚI THIỆU & QUY TRÌNH SÁNG TÁC (ABOUT & WORKFLOW) -->
+      <!-- ===================================================================== -->
+      <div class="tab-pane" id="pane-about">
+        <div class="about-artist-sheet">
+          <div class="about-grid">
+            
+            <div class="about-left-col">
+              <h3>Về Hành Trình Sáng Tác</h3>
+              <p id="aboutStoryText">
+                Với niềm đam mê hội họa mãnh liệt từ thuở thiếu thời, các tác phẩm của tôi luôn hướng đến việc khơi gợi cảm xúc êm đềm, ngọt ngào và những kỷ niệm đẹp đẽ của tuổi trẻ. Tôi tin rằng nghệ thuật không chỉ là hình ảnh, mà là nhịp cầu kết nối những tâm hồn đồng điệu.
+              </p>
+
+              <h4 class="mt-4 mb-2">Phần Mềm & Công Cụ Sáng Tác:</h4>
+              <div class="software-tools-badges">
+                <span class="tool-badge"><i class="fa-solid fa-pen-nib"></i> Procreate 5.3</span>
+                <span class="tool-badge"><i class="fa-solid fa-bezier-curve"></i> Adobe Illustrator 2026</span>
+                <span class="tool-badge"><i class="fa-solid fa-image"></i> Adobe Photoshop</span>
+                <span class="tool-badge"><i class="fa-solid fa-tablet-screen-button"></i> iPad Pro M4 & Apple Pencil Pro</span>
+              </div>
+
+              <h4 class="mt-4 mb-2">Cam Kết Bản Quyền & Bàn Giao:</h4>
+              <ul class="commitments-list">
+                <li><i class="fa-solid fa-circle-check text-mint"></i> 100% bản vẽ tay kỹ thuật số nguyên bản, không sao chép (No Copy/No AI Generated).</li>
+                <li><i class="fa-solid fa-circle-check text-mint"></i> Cung cấp đầy đủ giấy chứng nhận bản quyền thương mại điện tử ARTFAIR.</li>
+                <li><i class="fa-solid fa-circle-check text-mint"></i> Bàn giao file vector (.AI, .EPS) hoặc layered PSD 300 - 600 DPI chuẩn in ấn.</li>
+              </ul>
+            </div>
+
+            <div class="about-right-col">
+              <div class="workflow-stepper-card">
+                <h4><i class="fa-solid fa-route text-primary"></i> Quy Trình Làm Việc Chuẩn 4 Bước</h4>
+                
+                <div class="step-line-item">
+                  <div class="step-num">1</div>
+                  <div class="step-content">
+                    <strong>Tiếp nhận Brief & Thống nhất Ý Tưởng</strong>
+                    <p>Trao đổi chi tiết về bố cục, màu sắc, đối tượng khách hàng và mục đích sử dụng.</p>
+                  </div>
+                </div>
+
+                <div class="step-line-item">
+                  <div class="step-num">2</div>
+                  <div class="step-content">
+                    <strong>Phác Thảo Thô (Rough Sketch & Color Key)</strong>
+                    <p>Gửi 2-3 bản phác thảo ý tưởng để bạn lựa chọn và góp ý chỉnh sửa đầu tiên.</p>
+                  </div>
+                </div>
+
+                <div class="step-line-item">
+                  <div class="step-num">3</div>
+                  <div class="step-content">
+                    <strong>Lên Chi Tiết & Tinh Chỉnh (Rendering)</strong>
+                    <p>Vẽ hoàn thiện màu sắc, ánh sáng và phân tách layer theo chuẩn in ấn.</p>
+                  </div>
+                </div>
+
+                <div class="step-line-item">
+                  <div class="step-num">4</div>
+                  <div class="step-content">
+                    <strong>Nghiệm Thu & Bàn Giao File Gốc</strong>
+                    <p>Bàn giao link tải file gốc độ nét cao kèm giấy phép bản quyền hợp pháp.</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-bottom">
+      <div class="profile-container-1200 footer-bottom-inner">
+        <p>&copy; 2026 ARTFAIR Việt Nam. Trang cá nhân nghệ sĩ số hóa độc quyền.</p>
+        <p><a href="index.html">← Quay lại Trang Chủ Chợ Phiên</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS: AUTH MODAL, DETAIL MODAL, CART DRAWER, CONFIRMATION -->
+  <!-- ========================================================================= -->
+
+  <!-- AUTHENTICATION MODAL (Guest Intercept) -->
+  <div class="modal-overlay" id="authModalOverlay">
+    <div class="modal-container auth-modal-box">
+      <button class="modal-close-btn" onclick="closeAuthModal()">&times;</button>
+
+      <div class="guest-intercept-notice" id="guestInterceptNotice" style="display: none;">
+        <i class="fa-solid fa-lock-open text-primary"></i>
+        <div>
+          <strong>Cần Đăng Nhập Để Tiếp Tục!</strong>
+          <p id="interceptActionDesc">Vui lòng đăng nhập hoặc tạo tài khoản để thực hiện thao tác này.</p>
+        </div>
+      </div>
+
+      <div class="auth-tabs-header">
+        <button class="auth-tab-btn active" id="tabBtnLogin" onclick="switchAuthTab('login')">
+          <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập
+        </button>
+        <button class="auth-tab-btn" id="tabBtnRegister" onclick="switchAuthTab('register')">
+          <i class="fa-solid fa-user-plus"></i> Đăng Ký Mới
+        </button>
+      </div>
+
+      <!-- Login Tab -->
+      <div class="auth-tab-pane active" id="paneLogin">
+        <form class="auth-form" onsubmit="handleProfileLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Email hoặc Tên Đăng Nhập:</label>
+            <div class="input-with-icon">
+              <i class="fa-regular fa-envelope"></i>
+              <input type="email" id="profileLoginEmail" class="form-input" placeholder="artist@artfair.vn" required value="demo.collector@artfair.vn">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="label-row-between">
+              <label class="form-label">Mật Khẩu:</label>
+              <a href="#" class="forgot-pass-link" onclick="alert('Đã gửi link khôi phục mật khẩu vào email của bạn!')">Quên mật khẩu?</a>
+            </div>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="profileLoginPassword" class="form-input" placeholder="Nhập mật khẩu" required value="12345678">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Đăng Nhập Ngay
+          </button>
+        </form>
+
+        <div class="auth-divider"><span>Hoặc tiếp tục với mạng xã hội</span></div>
+        <div class="social-login-grid">
+          <button type="button" class="btn-social-sso google-btn" onclick="handleGoogleLogin()">
+            <svg class="social-svg-icon" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Google Login</span>
+          </button>
+          <button type="button" class="btn-social-sso facebook-btn" onclick="handleFacebookLogin()">
+            <i class="fa-brands fa-facebook"></i>
+            <span>Facebook Login</span>
+          </button>
+        </div>
+
+        <div class="demo-login-shortcuts">
+          <p class="demo-title">⚡ Đăng Nhập Mẫu 1 Chạm Để Test Nhanh:</p>
+          <div class="demo-btn-group">
+            <button class="btn btn-ghost btn-sm" onclick="profileQuickLogin('collector')">
+              <i class="fa-solid fa-bag-shopping"></i> Shop POD Gen Z
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="profileQuickLogin('artist')">
+              <i class="fa-solid fa-palette"></i> Artist Pro
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Register Tab -->
+      <div class="auth-tab-pane" id="paneRegister">
+        <form class="auth-form" onsubmit="handleProfileRegisterSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Họ và Tên:</label>
+            <input type="text" id="regNameProfile" class="form-input" placeholder="Nguyễn Văn A" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email:</label>
+            <input type="email" id="regEmailProfile" class="form-input" placeholder="you@artfair.vn" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mật khẩu:</label>
+            <input type="password" id="regPassProfile" class="form-input" placeholder="Tối thiểu 6 ký tự" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">
+  <i class="fa-solid fa-user-plus"></i> Hoàn Tất Đăng Ký
+</button>
+        </form>
+      </div>
+
+
+
+    </div>
+  </div>
+
+  <!-- ARTWORK DETAIL MODAL WITH WATERMARK & ZOOM -->
+  <div class="modal-overlay" id="artworkDetailModalOverlay">
+    <div class="modal-container artwork-detail-modal-box">
+      <button class="modal-close-btn" id="closeDetailModal" onclick="closeDetailModal()">&times;</button>
+      <div class="detail-modal-layout">
+        <div class="detail-preview-column">
+          <div class="detail-img-viewport" id="detailImgViewport">
+            <img src="" alt="Artwork Detail" id="modalArtImg" class="detail-display-img">
+            <div class="diagonal-watermark-layer" id="modalWatermarkLayer">
+              <div class="watermark-pattern">
+                <span>ARTFAIR PREVIEW • BẢN QUYỀN BẢO HỘ</span>
+                <span>BẢN QUYỀN THUỘC TÁC GIẢ • DO NOT COPY</span>
+              </div>
+            </div>
+            <div class="zoom-lens-indicator">
+              <i class="fa-solid fa-magnifying-glass-plus"></i> Rê chuột để zoom chi tiết
+            </div>
+          </div>
+          <div class="preview-toolbar">
+            <label class="toggle-switch-label">
+              <input type="checkbox" id="toggleWatermarkSwitch" checked onchange="toggleWatermark(this.checked)">
+              <span class="switch-slider"></span>
+              <span class="switch-text">Bật Watermark Bảo Hộ</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="detail-info-column">
+          <div class="detail-header-block">
+            <div class="cat-and-id">
+              <span class="badge-cat" id="modalArtCategory">Minh Họa</span>
+              <span class="art-code" id="modalArtId">ID: #AF-01</span>
+            </div>
+            <h2 class="modal-art-title" id="modalArtTitle">Tên Tác Phẩm</h2>
+            <div class="art-social-stats">
+              <span id="modalArtLikes"><i class="fa-solid fa-heart text-danger"></i> 245 thích</span>
+              <span><i class="fa-solid fa-eye"></i> 1,820 lượt xem</span>
+            </div>
+          </div>
+
+          <div class="art-specs-grid">
+            <div class="spec-cell">
+              <span class="spec-label">Độ Phân Giải</span>
+              <strong class="spec-value" id="modalArtResolution">4800 x 6000 px</strong>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Định Dạng</span>
+              <strong class="spec-value" id="modalArtFormats">PNG, PSD, AI</strong>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Ứng Dụng</span>
+              <strong class="spec-value" id="modalArtUsage">Áo thun, Canvas, Decal</strong>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Phần Mềm</span>
+              <strong class="spec-value" id="modalArtSoftware">Procreate & AI</strong>
+            </div>
+          </div>
+
+          <div class="detail-description-block">
+            <h5>Mô Tả Ý Tưởng:</h5>
+            <p id="modalArtDesc">...</p>
+          </div>
+
+          <!-- License Picker -->
+         <div class="modal-license-picker">
+            <label class="form-label-bold">Chọn Gói Bản Quyền:</label>
+            <div class="modal-tier-options">
+              <label class="modal-tier-radio active">
+                <input type="radio" name="modalTierSelect" value="1250000" checked onchange="updateProfileModalPrice()">
+                <div>
+                  <strong>Cá Nhân: <span class="price-hl" id="modalPricePersonal">1.250.000 VNĐ</span></strong>
+                  <p>In tranh cá nhân, wallpaper, avatar phi thương mại</p>
+                </div>
+              </label>
+
+              <label class="modal-tier-radio">
+                <input type="radio" name="modalTierSelect" value="4500000" onchange="updateProfileModalPrice()">
+                <div>
+                  <strong>Thương Mại POD Nhỏ: <span class="price-hl" id="modalPriceCommercial">4.500.000 VNĐ</span></strong>
+                  <p>In dưới 5,000 ấn phẩm kinh doanh áo thun, cốc sứ, sticker</p>
+                </div>
+              </label>
+
+              <label class="modal-tier-radio">
+                <input type="radio" name="modalTierSelect" value="37500000" onchange="updateProfileModalPrice()">
+                <div>
+                  <strong>Độc Quyền Toàn Phần: <span class="price-hl" id="modalPriceExclusive">37.500.000 VNĐ</span></strong>
+                  <p>Mua đứt quyền tác giả, bàn giao trọn bộ file gốc</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="modal-footer-checkout">
+            <div class="price-preview-strip">
+              <span>Đơn giá thanh toán:</span>
+              <div class="modal-price-calc-col">
+                <strong class="final-modal-price" id="modalDetailPriceDisplay">1.250.000 VNĐ</strong>
+              </div>
+            </div>
+            <div class="modal-btn-row">
+              <button class="btn btn-outline" id="btnModalHeart" onclick="handleDetailHeart()">
+                <i class="fa-regular fa-heart"></i> Thả Tim
+              </button>
+              <button class="btn btn-secondary" onclick="handleDetailAddToCart()">
+                <i class="fa-solid fa-cart-plus"></i> Thêm Giỏ Hàng
+              </button>
+              <button class="btn btn-primary pulse-glow" onclick="handleDetailBuyNow()">
+                <i class="fa-solid fa-bolt"></i> Mua Ngay
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CART DRAWER -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay">
+    <div class="cart-drawer-panel" id="cartDrawerPanel">
+      <div class="cart-drawer-header">
+        <div class="cart-header-title">
+          <i class="fa-solid fa-bag-shopping text-primary"></i>
+          <h3>Giỏ Hàng Bản Quyền (<span id="cartDrawerCount">0</span>)</h3>
+        </div>
+        <button class="drawer-close-btn" onclick="closeCartDrawer()">&times;</button>
+      </div>
+
+      <div class="cart-drawer-body" id="cartItemsContainer"></div>
+
+      <div class="cart-drawer-footer">
+        <div class="coupon-box">
+          <input type="text" id="couponInput" placeholder="Mã giảm giá (Thử: GENZART)">
+          <button class="btn btn-outline btn-sm" onclick="applyProfileCoupon()">Áp Dụng</button>
+        </div>
+        <div id="couponMessage" class="coupon-status-msg"></div>
+
+        <div class="cart-totals-sheet">
+          <div class="total-line">
+            <span>Tạm tính:</span>
+            <span id="cartSubtotal">0 VNĐ</span>
+          </div>
+          <div class="total-line discount-line" id="discountLine" style="display: none;">
+            <span>Ưu đãi voucher:</span>
+            <span id="cartDiscount">-0 VNĐ</span>
+          </div>
+          <div class="total-line grand-total-line">
+            <strong>Tổng thanh toán:</strong>
+            <strong class="grand-price" id="cartGrandTotal">0 VNĐ</strong>
+          </div>
+        </div>
+
+        <button class="btn btn-primary w-100 btn-lg pulse-glow" onclick="handleProfileCheckout()">
+          <i class="fa-solid fa-lock"></i> Tiến Hành Thanh Toán Bản Quyền
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMISSION SUCCESS MODAL -->
+  <div class="modal-overlay" id="directCommissionSuccessModal">
+    <div class="modal-container text-center confirmation-modal-box">
+      <div class="success-check-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <h2 class="confirm-title">Gửi Yêu Cầu Commission Thành Công!</h2>
+      <p class="confirm-sub">Mã vé yêu cầu: <strong class="badge-ticket" id="directConfirmTicketId">#COMM-8821</strong></p>
+      
+      <div class="confirm-summary-box" id="directConfirmSummaryBox"></div>
+
+      <p class="confirm-instruction">
+        Yêu cầu của bạn đã được chuyển thẳng tới Artist. Artist sẽ xem xét brief và phản hồi kèm phác thảo đầu tiên qua email trong vòng 2-4 giờ làm việc.
+      </p>
+
+      <button class="btn btn-primary btn-lg" onclick="document.getElementById('directCommissionSuccessModal').classList.remove('active')">
+        <i class="fa-solid fa-check"></i> Đã Hiểu & Đóng
+      </button>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+ <!-- Shared Data & Page Scripts -->
+  <script src="artists-data.js"></script>
+  <script src="artist-profile.js"></script>
+
+  <script>
+    // ==============================================================
+    // 1. KIỂM TRA PHIÊN ĐĂNG NHẬP TRÊN TRANG NGHỆ SĨ
+    // ==============================================================
+    function checkArtistPageAuth() {
+      const isLoggedIn = localStorage.getItem('artfair_is_logged_in') === 'true';
+      let user = null;
+      try { user = JSON.parse(localStorage.getItem('artfair_user') || 'null'); } catch(e){}
+
+      const guestActions = document.querySelector('.guest-actions');
+      const loggedProfile = document.querySelector('.logged-in-profile');
+      const userNameLabel = document.getElementById('userNameLabel');
+      const dropdownUserName = document.getElementById('dropdownUserName');
+
+      if (isLoggedIn && user && (user.name || user.email)) {
+        window.currentUser = user;
+        window.isLoggedIn = true;
+        if (guestActions) guestActions.style.display = 'none';
+        if (loggedProfile) loggedProfile.style.display = 'flex';
+        
+        const displayName = user.name || user.email.split('@')[0];
+        if (userNameLabel) userNameLabel.textContent = displayName;
+        if (dropdownUserName) dropdownUserName.textContent = displayName.replace(/\s*\(.*\)/, '');
+      } else {
+        window.currentUser = null;
+        window.isLoggedIn = false;
+        if (guestActions) guestActions.style.display = 'flex';
+        if (loggedProfile) loggedProfile.style.display = 'none';
+      }
+      updateArtistFollowBtnState();
+    }
+
+    // ==============================================================
+    // 2. THEO DÕI NGHỆ SĨ (ĐỒNG BỘ CHUẨN VÀO TRANG CÁ NHÂN)
+    // ==============================================================
+    function handleProfileFollow() {
+      if (!localStorage.getItem('artfair_is_logged_in')) {
+        alert('Vui lòng đăng nhập để lưu nghệ sĩ vào danh sách theo dõi!');
+        openAuthModal('login');
+        return;
+      }
+
+      let user = {};
+      try { user = JSON.parse(localStorage.getItem('artfair_user') || '{}'); } catch(e){}
+      const safeEmail = (user.email || 'guest').toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const followKey = `artfair_following_artists_${safeEmail}`;
+
+      const artistName = (document.getElementById('artistFullName')?.textContent || 'Lan Chi').split('(')[0].trim();
+      const artistRole = document.getElementById('artistRoleTitle')?.textContent || 'Concept Artist & Minh Họa';
+      const artistAvatar = document.getElementById('artistAvatarImg')?.src || '2e72c41b49afad2d08530b6a0475ba66.jpg';
+
+      let following = JSON.parse(localStorage.getItem(followKey) || '[]');
+      const index = following.findIndex(a => a.name.includes(artistName));
+
+      if (index > -1) {
+        following.splice(index, 1);
+        localStorage.setItem(followKey, JSON.stringify(following));
+        alert(`💔 Đã hủy theo dõi nghệ sĩ ${artistName}.`);
+      } else {
+        following.unshift({
+          id: 'FOLLOW-' + Date.now(),
+          name: artistName,
+          role: artistRole,
+          avatar: artistAvatar,
+          worksCount: 18,
+          followers: '1.4k'
+        });
+        localStorage.setItem(followKey, JSON.stringify(following));
+        alert(`❤️ Đã theo dõi ${artistName}! Nghệ sĩ đã được lưu vào Bảng Quản Lý.`);
+      }
+      updateArtistFollowBtnState();
+    }
+    window.handleProfileFollow = handleProfileFollow;
+
+    function updateArtistFollowBtnState() {
+      const btn = document.getElementById('btnHeroFollowArtist');
+      const textSpan = document.getElementById('followBtnText');
+      if (!btn) return;
+
+      let user = {};
+      try { user = JSON.parse(localStorage.getItem('artfair_user') || '{}'); } catch(e){}
+      const safeEmail = (user.email || 'guest').toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const followKey = `artfair_following_artists_${safeEmail}`;
+
+      const artistName = (document.getElementById('artistFullName')?.textContent || 'Lan Chi').split('(')[0].trim();
+      const following = JSON.parse(localStorage.getItem(followKey) || '[]');
+      const isFollowing = following.some(a => a.name.includes(artistName));
+
+      if (isFollowing) {
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-secondary');
+        if (textSpan) textSpan.textContent = 'Đang Theo Dõi ✓';
+      } else {
+        btn.classList.add('btn-primary');
+        btn.classList.remove('btn-secondary');
+        if (textSpan) textSpan.textContent = 'Theo Dõi Gian Hàng';
+      }
+    }
+
+    // ==============================================================
+    // 3. GỬI BRIEF COMMISSION (LƯU VÀO CẢ BUYER & CREATOR ĐỂ TEST)
+    // ==============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+      checkArtistPageAuth();
+
+      const briefForm = document.getElementById('directArtistBriefForm');
+      if (briefForm) {
+        briefForm.onsubmit = function(e) {
+          e.preventDefault();
+
+          if (!localStorage.getItem('artfair_is_logged_in')) {
+            alert('Vui lòng đăng nhập để gửi brief yêu cầu sáng tác cho nghệ sĩ!');
+            openAuthModal('login');
+            return;
+          }
+
+          let user = {};
+          try { user = JSON.parse(localStorage.getItem('artfair_user') || '{}'); } catch(err){}
+          const safeEmail = (user.email || 'guest').toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+          const artistName = (document.getElementById('artistFullName')?.textContent || 'Lan Chi').split('(')[0].trim();
+          const title = document.getElementById('directProjectTitle')?.value.trim() || 'Yêu cầu sáng tác độc bản';
+         const budget = document.getElementById('directSliderVal')?.textContent || '6.250.000 VNĐ';
+          const deadline = document.getElementById('directDeadline')?.value || '2026-10-30';
+          const desc = document.getElementById('directDescription')?.value.trim() || '';
+          const code = '#COMM-' + Math.floor(1000 + Math.random() * 9000);
+
+          const newBrief = {
+            id: code,
+            artist: artistName,
+            title: title,
+            budget: budget,
+            deadline: deadline,
+            desc: desc,
+            client: user.name || 'Khách hàng',
+            package: 'Bản Quyền Thương Mại POD',
+            brief: desc,
+            img: '45fbff086b31157aa2e23b94f086bd06.jpg',
+            date: new Date().toLocaleDateString('vi-VN')
+          };
+
+         // 1. Lưu vào danh sách tiến độ của Người Mua
+          const buyerKey = `artfair_commissions_${safeEmail}`;
+          let buyerComms = JSON.parse(localStorage.getItem(buyerKey) || '[]');
+          buyerComms.unshift(newBrief);
+          localStorage.setItem(buyerKey, JSON.stringify(buyerComms));
+
+          // 2. Chuyển đơn tới Hộp thư của đúng Họa sĩ Lan Chi
+          const artistKey = `artfair_creator_inbox_lanchi_art_gmail_com`;
+          let artistInbox = JSON.parse(localStorage.getItem(artistKey) || '[]');
+          artistInbox.unshift(newBrief);
+          localStorage.setItem(artistKey, JSON.stringify(artistInbox));
+
+          // Cập nhật popup thành công
+          document.getElementById('directConfirmTicketId').textContent = code;
+          document.getElementById('directConfirmSummaryBox').innerHTML = `
+            <p><strong>Nghệ sĩ nhận:</strong> ${artistName}</p>
+            <p><strong>Dự án:</strong> ${title}</p>
+            <p><strong>Ngân sách:</strong> ${budget}</p>
+            <p><strong>Hạn bàn giao:</strong> ${deadline}</p>
+          `;
+
+          const modal = document.getElementById('directCommissionSuccessModal');
+          if (modal) { modal.classList.add('active'); modal.style.display = 'flex'; }
+        };
+      }
+    });
+
+    // ==============================================================
+    // 4. XỬ LÝ ĐĂNG NHẬP / ĐĂNG KÝ VÀ MODAL TẠI TRANG ARTIST
+    // ==============================================================
+    function openAuthModal(tab = 'login') {
+      const modal = document.getElementById('authModalOverlay');
+      if (modal) {
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+      }
+      switchAuthTab(tab);
+    }
+    window.openAuthModal = openAuthModal;
+
+    function closeAuthModal() {
+      const modal = document.getElementById('authModalOverlay');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+      }
+    }
+    window.closeAuthModal = closeAuthModal;
+
+    function switchAuthTab(tab) {
+      document.getElementById('tabBtnLogin')?.classList.toggle('active', tab === 'login');
+      document.getElementById('tabBtnRegister')?.classList.toggle('active', tab === 'register');
+      document.getElementById('paneLogin').style.display = tab === 'login' ? 'block' : 'none';
+      document.getElementById('paneRegister').style.display = tab === 'register' ? 'block' : 'none';
+    }
+    window.switchAuthTab = switchAuthTab;
+
+    function handleProfileLoginSubmit(e) {
+      if (e) e.preventDefault();
+      const email = document.getElementById('profileLoginEmail')?.value.trim() || 'user@artfair.vn';
+      const name = email.split('@')[0];
+      completeProfileAuth(name, email, 'collector');
+    }
+    window.handleProfileLoginSubmit = handleProfileLoginSubmit;
+
+    function handleProfileRegisterSubmit(e) {
+      if (e) e.preventDefault();
+      const name = document.getElementById('regNameProfile')?.value.trim() || 'Thành Viên Mới';
+      const email = document.getElementById('regEmailProfile')?.value.trim() || 'member@artfair.vn';
+      completeProfileAuth(name, email, 'collector');
+    }
+    window.handleProfileRegisterSubmit = handleProfileRegisterSubmit;
+
+    function completeProfileAuth(name, email, role) {
+      const user = { isLoggedIn: true, name: name, email: email, role: role };
+      localStorage.setItem('artfair_user', JSON.stringify(user));
+      localStorage.setItem('artfair_is_logged_in', 'true');
+      localStorage.setItem('artfair_active_role', role);
+      closeAuthModal();
+      checkArtistPageAuth();
+      location.reload();
+    }
+
+    function handleHeaderLogout() {
+      localStorage.removeItem('artfair_is_logged_in');
+      localStorage.removeItem('artfair_user');
+      localStorage.removeItem('artfair_active_role');
+      window.location.href = 'index.html';
+    }
+    window.handleHeaderLogout = handleHeaderLogout;
+
+    // Review Feeds
+    const SAMPLE_REVIEWS = [
+      {
+        id: 'REV-1',
+        name: 'Hoàng Phúc',
+        role: 'Local Brand Owner',
+        avatar: '34afaac0faa70a1bb6c4b5ad89b77756-2.jpg',
+        date: '24/09/2026',
+        rating: 5,
+        type: 'pod',
+        package: 'Gói Bản Quyền POD Mở Rộng (13.750.000 VNĐ)',
+        artwork: 'Cyberpunk Streetwear Vector Edition',
+        comment: 'File gốc Vector phân màu in lụa và in DTG cực kỳ xuất sắc! Test mẫu áo thun Oversized lên màu sắc nét 100%, không bị vỡ hạt.',
+        reply: 'Cảm ơn shop Hoàng Phúc đã tin tưởng ủng hộ Chi Art Studio! ❤️'
+      },
+      {
+        id: 'REV-2',
+        name: 'Minh Thư BookLab',
+        role: 'Nhà Xuất Bản',
+        avatar: '2e72c41b49afad2d08530b6a0475ba66.jpg',
+        date: '18/09/2026',
+        rating: 5,
+        type: 'commission',
+        package: 'Độc Quyền Toàn Phần Buyout (37.500.000 VNĐ)',
+        artwork: 'Bìa Sách "Khu Vườn Bí Mật Của Nàng Thơ"',
+        comment: 'Đã hợp tác vẽ Commission cùng Lan Chi qua 3 đầu sách. Nét vẽ pastel rất giàu cảm xúc, giao bản phác thảo thô đúng hạn.',
+        reply: 'Dạ em cảm ơn chị Thư và ban biên tập BookLab luôn tạo điều kiện cho em sáng tạo ạ!'
+      }
+    ];
+
+    function renderReviewsFeed(filterType = 'all') {
+      const container = document.getElementById('reviewsFeedList');
+      if (!container) return;
+
+      const filtered = SAMPLE_REVIEWS.filter(r => {
+        if (filterType === 'all') return true;
+        if (filterType === '5star') return r.rating === 5;
+        if (filterType === 'pod') return r.type === 'pod';
+        if (filterType === 'commission') return r.type === 'commission';
+        return true;
+      });
+
+      container.innerHTML = filtered.map(r => `
+        <div class="review-card-item">
+          <div class="review-header-row">
+            <div class="reviewer-meta">
+              <img src="${r.avatar}" alt="${r.name}" class="reviewer-avatar">
+              <div>
+                <h4 class="reviewer-name">${r.name} <span class="badge-buyer-verified">✓ Đã Mua Bản Quyền</span></h4>
+                <div class="review-date">${r.role} • Đánh giá ngày ${r.date}</div>
+              </div>
+            </div>
+            <div class="star-rating-row">${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}</div>
+          </div>
+          <div class="review-purchased-tag">Ấn phẩm: <strong>${r.artwork}</strong> (${r.package})</div>
+          <p class="review-body-text">"${r.comment}"</p>
+          ${r.reply ? `<div class="artist-reply-bubble"><strong>Phản hồi từ Artist:</strong> ${r.reply}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function filterReviews(type) {
+      document.querySelectorAll('.review-chip').forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-revfilter') === type));
+      renderReviewsFeed(type);
+    }
+    window.filterReviews = filterReviews;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderReviewsFeed('all');
+    });
+function handleGoogleLogin() {
+      const useDefault = confirm(
+        `[GOOGLE OAUTH]\nĐăng nhập bằng Google vào ARTFAIR\n\n` +
+        `• Bấm "OK" để dùng tài khoản demo: Trần Khánh (trankhanh.pod@gmail.com)\n` +
+        `• Bấm "HỦY (Cancel)" để nhập Gmail khác của bạn`
+      );
+
+      if (useDefault) {
+        completeProfileAuth('Trần Khánh', 'trankhanh.pod@gmail.com', 'collector');
+      } else {
+        const name = prompt('Nhập Tên tài khoản Google của bạn:', 'Khách Hàng');
+        if (!name) return;
+        const email = prompt('Nhập địa chỉ Gmail:', name.toLowerCase().replace(/[^a-z0-9]/g, '') + '@gmail.com');
+        if (!email) return;
+        completeProfileAuth(name, email, 'collector');
+      }
+    }
+    window.handleGoogleLogin = handleGoogleLogin;
+function updateDirectSlider(val) {
+      const display = document.getElementById('directSliderVal');
+      if (display) {
+        display.textContent = typeof formatVND === 'function' ? formatVND(val) : Number(val).toLocaleString('vi-VN') + ' VNĐ';
+      }
+    }
+    window.updateDirectSlider = updateDirectSlider;
+
+    function updateProfileModalPrice() {
+      const selected = document.querySelector('input[name="modalTierSelect"]:checked');
+      const display = document.getElementById('modalDetailPriceDisplay');
+      if (selected && display) {
+        const val = Number(selected.value);
+        display.textContent = typeof formatVND === 'function' ? formatVND(val) : val.toLocaleString('vi-VN') + ' VNĐ';
+      }
+    }
+    window.updateProfileModalPrice = updateProfileModalPrice;
+  </script>
+</body>
+</html>
+
